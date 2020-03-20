@@ -36,10 +36,19 @@
                             'size': 'invisible',
                             'hl': '{{$language}}'
                         });
-                        grecaptcha.ready(function () {
+
+                        setInterval(function () {
+                          grecaptcha.ready(function () {
                             grecaptcha.execute(client{{$field}}, {
-                                action: '{{$action}}'
+                              action: '{{$action}}'
                             });
+                          });
+                        }, 60000);
+
+                        grecaptcha.ready(function () {
+                          grecaptcha.execute(client{{$field}}, {
+                            action: '{{$action}}'
+                          });
                         });
                     }
             @endforeach
@@ -55,9 +64,14 @@
     function refreshReCaptchaV3(fieldId,action){
         grecaptcha.reset(window['client'+fieldId]);
         grecaptcha.ready(function () {
+          setInterval(function () {
             grecaptcha.execute(window['client'+fieldId], {
                 action: action
             });
+          }, 60000);
+          grecaptcha.execute(window['client'+fieldId], {
+            action: action
+          });
         });
     }
 
@@ -65,4 +79,3 @@
         return grecaptcha.getResponse(window['client'+fieldId])
     }
 </script>
-
